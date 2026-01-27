@@ -150,9 +150,20 @@
       </div>
 
       <div class="row">
-        <input id="q" placeholder="Escribe un producto (ej: leche, tortillas, arroz)..." />
-        <button class="btn" onclick="buscar()">Buscar</button>
-        <button class="btn2" onclick="limpiar()">Borrar</button>
+  <input id="q" placeholder="Producto (ej: leche, tortillas, arroz)..." />
+</div>
+
+<div class="row">
+  <input id="zip" placeholder="ZIP (ej: 94545)" style="max-width:220px" />
+  <label style="display:flex; align-items:center; gap:8px; opacity:.9;">
+    <input type="checkbox" id="soloLatino" checked />
+    Solo latino
+  </label>
+
+  <button class="btn" onclick="buscar()">Buscar</button>
+  <button class="btn2" onclick="limpiar()">Borrar</button>
+</div>
+
       </div>
 
       <div class="grid">
@@ -178,23 +189,69 @@
 <script>
   // Tiendas ejemplo (latinas / comunes)
   const TIENDAS = [
-    "Cardenas Markets",
-    "Mi Pueblo / Mi Rancho",
-    "La Superior",
-    "Northgate Market",
-    "Walmart",
-    "Target"
+  const ZIP_DEFAULT = "94545";
+const TIENDAS = [
+  { nombre: "Cardenas Markets", direccion: "Hayward, CA (área 94545)", tipo:"Latino" },
+  { nombre: "Mi Pueblo Food Center", direccion: "Hayward, CA (área 94545)", tipo:"Latino" },
+  { nombre: "La Victoria Supermercado", direccion: "Hayward, CA (área 94545)", tipo:"Latino" },
+  { nombre: "FoodMaxx", direccion: "Hayward, CA (área 94545)", tipo:"General" },
+  { nombre: "Walmart Supercenter", direccion: "Hayward, CA (cerca)", tipo:"General" },
+  { nombre: "Target", direccion: "Hayward, CA (cerca)", tipo:"General" }
+];
+  
   ];
 
   function rand(min, max){
     return Math.round((Math.random() * (max - min) + min) * 100) / 100;
   }
+function buscar(){
+  const q = document.getElementById("q").value.trim();
+  const zip = (document.getElementById("zip").value.trim() || ZIP_DEFAULT);
+  const soloLatino = document.getElementById("soloLatino").checked;
 
-  function buscar(){
-    const q = document.getElementById("q").value.trim();
-    if(!q){
-      document.getElementById("out").innerHTML = "⚠️ Escribe un producto primero.";
-      return;
+  if(!q){
+    document.getElementById("out").innerHTML = "⚠️ Escribe un producto primero.";
+    return;
+  }
+
+  // filtrar tiendas
+  const tiendasFiltradas = TIENDAS.filter(t => soloLatino ? t.tipo === "Latino" : true);
+
+  if(tiendasFiltradas.length === 0){
+    document.getElementById("out").innerHTML = "⚠️ No hay tiendas en el filtro actual.";
+    return;
+  }
+
+  // precios “estimados” (por ahora)
+  const resultados = tiendasFiltradas.map(t => ({
+    tienda: t.nombre,
+    direccion: t.direccion,
+    zip: zip,
+    precio: rand(1.49, 9.99)
+  })).sort((a,b)=>a.precio-b.precio);
+
+  const html = resultados.map((r, i) => `
+    <div class="store">
+      <div>
+        <div><b>${escapeHtml(r.tienda)}</b></div>
+        <div class="small muted">${escapeHtml(r.direccion)} • ZIP: ${escapeHtml(r.zip)}</div>
+        <div class="small">Producto: <span class="muted">${escapeHtml(q)}</span></div>
+      </div>
+      <div style="text-align:right">
+        <div class="pill">$${r.precio.toFixed(2)}</div>
+        <div class="small muted">${i===0 ? "🔥 más barato" : ""}</div>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("out").innerHTML = html;
+
+  // guardar historial con mejor precio
+  guardarHistorial(`${q} (ZIP ${zip})`, { tienda: resultados[0].tienda, precio: resultados[0].precio });
+  renderHistorial();
+}
+
+  
     }
 
     // Genera precios simulados
