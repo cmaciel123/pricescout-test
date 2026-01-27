@@ -4,18 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PriceScout</title>
-  <style>
-    .logo{
-  width: 220px;
-  max-width: 90%;
-  height: auto;
-  display: block;
-  margin: 12px 0 8px 0;
-  border-radius: 14px;
-  border: 1px solid rgba(255,255,255,.18);
-  box-shadow: 0 10px 30px rgba(0,0,0,.35);
-}
 
+  <style>
     body{
       margin:0;
       font-family: Arial, Helvetica, sans-serif;
@@ -28,81 +18,272 @@
       padding: 24px;
     }
     .card{
-      background:#111a2e;
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:16px;
-      padding:20px;
-      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+      background: radial-gradient(1200px 600px at 20% 10%, rgba(255,255,255,.10), rgba(255,255,255,.02));
+      border: 1px solid rgba(255,255,255,.10);
+      border-radius: 22px;
+      padding: 24px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
     }
-    h1{margin:0 0 10px 0; font-size:32px;}
-    p{opacity:.9; margin: 0 0 14px 0;}
+    .header{
+      display:flex;
+      gap:16px;
+      align-items:center;
+      margin-bottom: 12px;
+    }
+    .logo{
+      width: 110px;
+      height: 110px;
+      object-fit: cover;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.18);
+      background: rgba(0,0,0,.25);
+    }
+    h1{
+      margin:0;
+      font-size: 44px;
+      letter-spacing: .5px;
+    }
+    .sub{
+      margin: 6px 0 18px;
+      opacity:.9;
+      font-size: 18px;
+    }
     .row{
       display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:14px;
-    }
-    input, button{
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      padding:12px 14px;
-      font-size:16px;
+      gap: 12px;
+      align-items:center;
+      margin: 14px 0 10px;
     }
     input{
       flex:1;
-      min-width:240px;
-      background:#0b1220;
+      padding: 16px 16px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(0,0,0,.30);
       color:#fff;
-      outline:none;
+      font-size: 18px;
+      outline: none;
     }
     button{
-      background:#22c55e;
-      color:#06110a;
-      font-weight:700;
+      padding: 14px 18px;
+      border-radius: 14px;
+      border: 0;
       cursor:pointer;
+      font-size: 18px;
+      font-weight: 700;
     }
-    button:hover{filter:brightness(1.05);}
-    .hint{
-      margin-top:10px;
-      font-size:14px;
-      opacity:.8;
+    .btn{
+      background: #22c55e;
+      color:#06210f;
+      min-width: 140px;
+    }
+    .btn2{
+      background: rgba(255,255,255,.10);
+      color:#fff;
+      border: 1px solid rgba(255,255,255,.16);
+    }
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 14px;
     }
     .box{
-      margin-top:16px;
-      padding:14px;
-      background:rgba(255,255,255,.06);
-      border-radius:12px;
-      border:1px dashed rgba(255,255,255,.16);
+      background: rgba(255,255,255,.06);
+      border-radius: 16px;
+      padding: 14px;
+      border: 1px dashed rgba(255,255,255,.16);
+    }
+    .title{
+      font-weight: 800;
+      margin: 0 0 8px;
+      opacity: .95;
+    }
+    .store{
+      display:flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 10px;
+      border-radius: 12px;
+      background: rgba(0,0,0,.22);
+      border: 1px solid rgba(255,255,255,.08);
+      margin-bottom: 10px;
+    }
+    .muted{opacity:.85}
+    .small{font-size: 13px; opacity:.8}
+    .pill{
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: rgba(34,197,94,.18);
+      border: 1px solid rgba(34,197,94,.35);
+      font-weight: 800;
+    }
+    .warn{
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+      padding: 10px 12px;
+      border-radius: 12px;
+      margin-top: 10px;
+      font-size: 14px;
+      opacity:.9;
+    }
+    @media (max-width: 860px){
+      h1{font-size: 34px}
+      .grid{grid-template-columns: 1fr;}
+      .header{flex-direction: column; align-items:flex-start}
+      .logo{width: 96px; height: 96px}
     }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <div class="card">
-      <h1>PriceScout 🚀</h1>
-     <img class="logo" src="images/logo.png" alt="Logo PriceScout">
 
-      <img src="images/logo.png" alt="Logo PriceScout" width="200">
-      <p>Tu app web ya está en vivo con GitHub Pages. Ahora vamos a buscar productos y guardar precios.</p>
+      <div class="header">
+        <!-- ✅ Logo desde /images -->
+        <img class="logo" src="images/logo.png" alt="Logo PriceScout">
+        <div>
+          <h1>PriceScout 🚀</h1>
+          <div class="sub">Tu app web ya está en vivo con GitHub Pages. Ahora buscamos productos y guardamos precios.</div>
+        </div>
+      </div>
 
       <div class="row">
         <input id="q" placeholder="Escribe un producto (ej: leche, tortillas, arroz)..." />
-        <button onclick="buscar()">Buscar</button>
+        <button class="btn" onclick="buscar()">Buscar</button>
+        <button class="btn2" onclick="limpiar()">Borrar</button>
       </div>
 
-      <div class="hint">Siguiente: vamos a agregar imágenes + lista de tiendas + precios.</div>
+      <div class="grid">
+        <div class="box">
+          <div class="title">✅ Resultados</div>
+          <div id="out" class="muted">Escribe un producto y presiona <b>Buscar</b>.</div>
+          <div class="warn">Nota: por ahora es una <b>simulación</b> (sin API). En el siguiente paso lo conectamos a datos reales.</div>
+        </div>
 
-      <div id="out" class="box">Resultados aparecerán aquí.</div>
+        <div class="box">
+          <div class="title">📌 Historial</div>
+          <div id="hist" class="muted">Aún no hay búsquedas guardadas.</div>
+          <div style="display:flex; gap:10px; margin-top:10px;">
+            <button class="btn2" onclick="borrarHistorial()">Borrar historial</button>
+          </div>
+          <div class="small" style="margin-top:8px;">Se guarda en tu navegador (localStorage).</div>
+        </div>
+      </div>
+
     </div>
   </div>
 
-  <script>
-    function buscar(){
-      const q = document.getElementById('q').value.trim();
-      document.getElementById('out').textContent =
-        q ? `Buscando: "${q}" (demo) ✅` : "Escribe algo primero.";
+<script>
+  // Tiendas ejemplo (latinas / comunes)
+  const TIENDAS = [
+    "Cardenas Markets",
+    "Mi Pueblo / Mi Rancho",
+    "La Superior",
+    "Northgate Market",
+    "Walmart",
+    "Target"
+  ];
+
+  function rand(min, max){
+    return Math.round((Math.random() * (max - min) + min) * 100) / 100;
+  }
+
+  function buscar(){
+    const q = document.getElementById("q").value.trim();
+    if(!q){
+      document.getElementById("out").innerHTML = "⚠️ Escribe un producto primero.";
+      return;
     }
-  </script>
+
+    // Genera precios simulados
+    const resultados = TIENDAS.map(t => ({
+      tienda: t,
+      precio: rand(1.49, 9.99)
+    })).sort((a,b)=>a.precio-b.precio);
+
+    // Render resultados
+    const html = resultados.map((r, i) => `
+      <div class="store">
+        <div>
+          <div><b>${r.tienda}</b></div>
+          <div class="small">Producto: <span class="muted">${escapeHtml(q)}</span></div>
+        </div>
+        <div style="text-align:right">
+          <div class="pill">$${r.precio.toFixed(2)}</div>
+          <div class="small muted">${i===0 ? "🔥 más barato" : ""}</div>
+        </div>
+      </div>
+    `).join("");
+
+    document.getElementById("out").innerHTML = html;
+
+    // Guardar en historial
+    guardarHistorial(q, resultados[0]);
+    renderHistorial();
+  }
+
+  function limpiar(){
+    document.getElementById("q").value = "";
+    document.getElementById("out").innerHTML = "Escribe un producto y presiona <b>Buscar</b>.";
+  }
+
+  function guardarHistorial(q, mejor){
+    const key = "pricescout_historial";
+    const now = new Date();
+    const item = {
+      producto: q,
+      mejorTienda: mejor.tienda,
+      mejorPrecio: Number(mejor.precio.toFixed(2)),
+      fecha: now.toLocaleString()
+    };
+    const arr = JSON.parse(localStorage.getItem(key) || "[]");
+    arr.unshift(item);
+    localStorage.setItem(key, JSON.stringify(arr.slice(0, 15))); // guarda últimos 15
+  }
+
+  function borrarHistorial(){
+    localStorage.removeItem("pricescout_historial");
+    renderHistorial();
+  }
+
+  function renderHistorial(){
+    const key = "pricescout_historial";
+    const arr = JSON.parse(localStorage.getItem(key) || "[]");
+    const el = document.getElementById("hist");
+    if(arr.length === 0){
+      el.innerHTML = "Aún no hay búsquedas guardadas.";
+      return;
+    }
+    el.innerHTML = arr.map(x => `
+      <div class="store">
+        <div>
+          <div><b>${escapeHtml(x.producto)}</b></div>
+          <div class="small muted">${escapeHtml(x.fecha)}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="pill">$${Number(x.mejorPrecio).toFixed(2)}</div>
+          <div class="small muted">${escapeHtml(x.mejorTienda)}</div>
+        </div>
+      </div>
+    `).join("");
+  }
+
+  // Seguridad básica para texto
+  function escapeHtml(str){
+    return String(str)
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+
+  // Carga historial al abrir
+  renderHistorial();
+</script>
+
 </body>
 </html>
 
