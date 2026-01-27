@@ -160,8 +160,9 @@
     Solo latino
   </label>
 
-  <button class="btn" onclick="buscar()">Buscar</button>
-  <button class="btn2" onclick="limpiar()">Borrar</button>
+  <button class="btn" id="btnBuscar" type="button">Buscar</button>
+<button class="btn2" id="btnBorrar" type="button">Borrar</button>
+
 </div>
 
       </div>
@@ -185,11 +186,10 @@
 
     </div>
   </div>
-
-<script>
-
+  
+  <script>
+  // ====== CONFIG ======
   const ZIP_DEFAULT = "94545";
-
   const TIENDAS = [
     { nombre: "Cardenas Markets", direccion: "Hayward, CA (área 94545)", tipo:"Latino" },
     { nombre: "Mi Pueblo Food Center", direccion: "Hayward, CA (área 94545)", tipo:"Latino" },
@@ -199,10 +199,10 @@
     { nombre: "Target", direccion: "Hayward, CA (cerca)", tipo:"General" }
   ];
 
+  // ====== HELPERS ======
   function rand(min, max){
     return Math.round((Math.random() * (max - min) + min) * 100) / 100;
   }
-
   function escapeHtml(str){
     return String(str)
       .replaceAll("&","&amp;")
@@ -212,22 +212,16 @@
       .replaceAll("'","&#039;");
   }
 
-  function escapeAttr(s){
-    return String(s).replace(/'/g,"&#39;").replace(/"/g,"&quot;");
-  }
-
-  // ====== PRECIOS MANUALES (LocalStorage) ======
+  // ====== LOCAL PRICES ======
   function keyPrecio(producto, tienda){
     return `precio:${producto.toLowerCase()}:${tienda.toLowerCase()}`;
   }
-
   function precioGuardado(producto, tienda){
     const v = localStorage.getItem(keyPrecio(producto, tienda));
     if(!v) return null;
     const n = parseFloat(v);
     return Number.isFinite(n) ? n : null;
   }
-
   function guardarPrecio(producto, tienda){
     const actual = precioGuardado(producto, tienda);
     const v = prompt(`Precio para "${producto}" en "${tienda}"`, actual ?? "");
@@ -238,7 +232,7 @@
       return;
     }
     localStorage.setItem(keyPrecio(producto, tienda), String(n));
-    buscar(); // refrescar
+    buscar();
   }
 
   // ====== HISTORIAL ======
@@ -255,23 +249,14 @@
     arr.unshift(item);
     localStorage.setItem(key, JSON.stringify(arr.slice(0, 15)));
   }
-
-  function borrarHistorial(){
-    localStorage.removeItem("pricescout_historial");
-    renderHistorial();
-  }
-
   function renderHistorial(){
-    const key = "pricescout_historial";
-    const arr = JSON.parse(localStorage.getItem(key) || "[]");
     const el = document.getElementById("hist");
     if(!el) return;
-
+    const arr = JSON.parse(localStorage.getItem("pricescout_historial") || "[]");
     if(arr.length === 0){
       el.innerHTML = "Aún no hay búsquedas guardadas.";
       return;
     }
-
     el.innerHTML = arr.map(x => `
       <div class="store">
         <div>
@@ -285,19 +270,19 @@
       </div>
     `).join("");
   }
+  function borrarHistorial(){
+    localStorage.removeItem("pricescout_historial");
+    renderHistorial();
+  }
 
-  // ====== BOTONES ======
+  // ====== ACTIONS ======
   function limpiar(){
     const q = document.getElementById("q");
-    if(q) q.value = "";
-
     const zip = document.getElementById("zip");
+    if(q) q.value = "";
     if(zip) zip.value = "";
-
     const out = document.getElementById("out");
     if(out) out.innerHTML = 'Escribe un producto y presiona <b>Buscar</b>.';
-
-    renderHistorial();
   }
 
   function buscar(){
@@ -311,18 +296,12 @@
     const soloLatino = soloLatinoEl ? soloLatinoEl.checked : false;
 
     if(!out) return;
-
     if(!q){
       out.innerHTML = "⚠️ Escribe un producto primero.";
       return;
     }
 
     const tiendasFiltradas = TIENDAS.filter(t => soloLatino ? t.tipo === "Latino" : true);
-
-    if(tiendasFiltradas.length === 0){
-      out.innerHTML = "⚠️ No hay tiendas en el filtro actual.";
-      return;
-    }
 
     const resultados = tiendasFiltradas.map(t => {
       const p = precioGuardado(q, t.nombre);
@@ -343,8 +322,8 @@
         </div>
         <div style="text-align:right">
           <div class="pill">$${r.precio.toFixed(2)}</div>
-          <button class="btn2" style="margin-top:8px; padding:8px 10px;"
-            onclick="guardarPrecio('${escapeAttr(q)}','${escapeAttr(r.tienda)}')">
+          <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
+            data-tienda="${escapeHtml(r.tienda)}" data-producto="${escapeHtml(q)}">
             Agregar precio
           </button>
           <div class="small muted">${i===0 ? "🔥 más barato" : ""}</div>
@@ -352,14 +331,37 @@
       </div>
     `).join("");
 
+    // Conectar botones "Agregar precio" (por delegación simple)
+    out.querySelectorAll("button[data-tienda]").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const tienda = btn.getAttribute("data-tienda");
+        const producto = btn.getAttribute("data-producto");
+        guardarPrecio(producto, tienda);
+      });
+    });
+
     guardarHistorial(`${q} (ZIP ${zip})`, { tienda: resultados[0].tienda, precio: resultados[0].precio });
     renderHistorial();
   }
 
-  // Cargar historial al abrir
-  document.addEventListener("DOMContentLoaded", renderHistorial);
+  // ====== BIND BUTTONS ======
+  document.addEventListener("DOMContentLoaded", () => {
+    // Prueba rápida: si esto corre, el JS está bien cargado
+    console.log("PriceScout JS OK ✅");
+
+    const b1 = document.getElementById("btnBuscar");
+    const b2 = document.getElementById("btnBorrar");
+    const b3 = document.getElementById("btnBorrarHist");
+
+    if(b1) b1.addEventListener("click", buscar);
+    if(b2) b2.addEventListener("click", limpiar);
+
+    renderHistorial();
+  });
 </script>
 
+
+  
 </script>
 
 </body>
