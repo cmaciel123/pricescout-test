@@ -1,9 +1,94 @@
 <!DOCTYPE html>
-<html>
+<html lang="es">
 <head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>PriceScout</title>
+  <style>
+    body{
+      margin:0;
+      font-family: Arial, Helvetica, sans-serif;
+      background:#0b1220;
+      color:#fff;
+    }
+    .wrap{
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+    .card{
+      background:#111a2e;
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:16px;
+      padding:20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.35);
+    }
+    h1{margin:0 0 10px 0; font-size:32px;}
+    p{opacity:.9; margin: 0 0 14px 0;}
+    .row{
+      display:flex;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-top:14px;
+    }
+    input, button{
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      padding:12px 14px;
+      font-size:16px;
+    }
+    input{
+      flex:1;
+      min-width:240px;
+      background:#0b1220;
+      color:#fff;
+      outline:none;
+    }
+    button{
+      background:#22c55e;
+      color:#06110a;
+      font-weight:700;
+      cursor:pointer;
+    }
+    button:hover{filter:brightness(1.05);}
+    .hint{
+      margin-top:10px;
+      font-size:14px;
+      opacity:.8;
+    }
+    .box{
+      margin-top:16px;
+      padding:14px;
+      background:rgba(255,255,255,.06);
+      border-radius:12px;
+      border:1px dashed rgba(255,255,255,.16);
+    }
+  </style>
 </head>
 <body>
-  <h1>PriceScout funcionando 🚀</h1>
+  <div class="wrap">
+    <div class="card">
+      <h1>PriceScout 🚀</h1>
+      <p>Tu app web ya está en vivo con GitHub Pages. Ahora vamos a buscar productos y guardar precios.</p>
+
+      <div class="row">
+        <input id="q" placeholder="Escribe un producto (ej: leche, tortillas, arroz)..." />
+        <button onclick="buscar()">Buscar</button>
+      </div>
+
+      <div class="hint">Siguiente: vamos a agregar imágenes + lista de tiendas + precios.</div>
+
+      <div id="out" class="box">Resultados aparecerán aquí.</div>
+    </div>
+  </div>
+
+  <script>
+    function buscar(){
+      const q = document.getElementById('q').value.trim();
+      document.getElementById('out').textContent =
+        q ? `Buscando: "${q}" (demo) ✅` : "Escribe algo primero.";
+    }
+  </script>
 </body>
 </html>
+
