@@ -227,7 +227,8 @@ function buscar(){
     tienda: t.nombre,
     direccion: t.direccion,
     zip: zip,
-    precio: rand(1.49, 9.99)
+    precio: precioGuardado(q, t.nombre) ?? rand(1.49, 9.99)
+
   })).sort((a,b)=>a.precio-b.precio);
 
   const html = resultados.map((r, i) => `
@@ -238,7 +239,13 @@ function buscar(){
         <div class="small">Producto: <span class="muted">${escapeHtml(q)}</span></div>
       </div>
       <div style="text-align:right">
-        <div class="pill">$${r.precio.toFixed(2)}</div>
+       <div class="pill">$${r.precio.toFixed(2)}</div>
+<button class="btn2"
+  style="margin-top:8px; padding:8px 10px;"
+  onclick="guardarPrecio('${escapeAttr(q)}','${escapeAttr(r.tienda)}')">
+  Agregar precio
+</button>
+
         <div class="small muted">${i===0 ? "🔥 más barato" : ""}</div>
       </div>
     </div>
@@ -339,6 +346,30 @@ function buscar(){
 
   // Carga historial al abrir
   renderHistorial();
+function keyPrecio(producto, tienda){
+  return `precio:${producto.toLowerCase()}:${tienda.toLowerCase()}`;
+}
+
+function precioGuardado(producto, tienda){
+  const v = localStorage.getItem(keyPrecio(producto, tienda));
+  if(!v) return null;
+  const n = parseFloat(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function guardarPrecio(producto, tienda){
+  const actual = precioGuardado(producto, tienda);
+  const v = prompt(`Precio para "${producto}" en "${tienda}"`, actual ?? "");
+  if(v === null) return;
+  const n = parseFloat(String(v).replace("$",""));
+  if(!Number.isFinite(n) || n <= 0){
+    alert("Precio inválido. Ej: 3.99");
+    return;
+  }
+  localStorage.setItem(keyPrecio(producto, tienda), String(n));
+  buscar(); // refresca resultados
+}
+
 </script>
 
 </body>
