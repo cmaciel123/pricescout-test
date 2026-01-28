@@ -354,36 +354,59 @@
     </div>
 
     <div style="text-align:right">
-      <div class="pill">$${r.precio.toFixed(2)}</div>
-      <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
-        data-tienda="${escapeHtml(r.tienda)}" data-producto="${escapeHtml(q)}">
-        Agregar precio
-        <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
+    <div style="text-align:right">
+  <div class="pill">$${r.precio.toFixed(2)}</div>
+
+  <button class="btn2" type="button"
+    style="margin-top:8px; padding:8px 10px;"
+    data-addprice="1"
+    data-tienda="${escapeHtml(r.tienda)}"
+    data-producto="${escapeHtml(q)}">
+    Agregar precio
+  </button>
+
+  <button class="btn2" type="button"
+    style="margin-top:8px; padding:8px 10px;"
     data-web="1"
     data-tienda="${escapeHtml(r.tienda)}"
-    data-producto="${escapeHtml(q)}"
-    data-zip="${escapeHtml(r.zip)}">
-    Buscar precio (web)
+    data-producto="${escapeHtml(q)}">
+    Buscar en Google
   </button>
 </div>
-      </button>
-    </div>
-  </div>
+  
+ 
 
 
     `).join("");
 
     // Conectar botones "Agregar precio" (por delegación simple)
-    out.querySelectorAll("button[data-web='1']").forEach(btn => {
-  btn.addEventListener("click", () => {
+  out.querySelectorAll("button[data-web='1']").forEach(btn => {
+  // ✅ Delegación de eventos (funciona siempre)
+out.onclick = (e) => {
+  const btn = e.target.closest("button");
+  if (!btn) return;
+
+  // 🔹 Agregar precio
+  if (btn.hasAttribute("data-addprice")) {
+    const tienda = btn.getAttribute("data-tienda");
+    const producto = btn.getAttribute("data-producto");
+
+    guardarPrecio(producto, tienda);
+    return;
+  }
+
+  // 🔹 Buscar precio en Google
+  if (btn.hasAttribute("data-web")) {
     const tienda = btn.getAttribute("data-tienda");
     const producto = btn.getAttribute("data-producto");
     const zip = btn.getAttribute("data-zip") || "94545";
 
     const query = encodeURIComponent(`${producto} ${tienda} price ${zip}`);
-    const url = `https://www.google.com/search?q=${query}`;
-    window.open(url, "_blank");
-  });
+    window.open(`https://www.google.com/search?q=${query}`, "_blank");
+    return;
+  }
+};
+
 
     });
 
