@@ -379,28 +379,25 @@
 
     `).join("");
 
-    // Conectar botones "Agregar precio" (por delegación simple)
-  out.querySelectorAll("button[data-web='1']").forEach(btn => {
-  // ✅ Delegación de eventos (funciona siempre)
+  
+// ✅ Delegación de eventos (sirve para TODOS los botones creados dinámicamente)
 out.onclick = (e) => {
   const btn = e.target.closest("button");
   if (!btn) return;
 
-  // 🔹 Agregar precio
+  // 1) Agregar precio
   if (btn.hasAttribute("data-addprice")) {
     const tienda = btn.getAttribute("data-tienda");
     const producto = btn.getAttribute("data-producto");
-
-    guardarPrecio(producto, tienda);
+    alert(`Agregar precio: ${producto} en ${tienda}`);
     return;
   }
 
-  // 🔹 Buscar precio en Google
+  // 2) Buscar en Google
   if (btn.hasAttribute("data-web")) {
     const tienda = btn.getAttribute("data-tienda");
     const producto = btn.getAttribute("data-producto");
     const zip = btn.getAttribute("data-zip") || "94545";
-
     const query = encodeURIComponent(`${producto} ${tienda} price ${zip}`);
     window.open(`https://www.google.com/search?q=${query}`, "_blank");
     return;
