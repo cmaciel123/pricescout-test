@@ -358,6 +358,14 @@
       <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
         data-tienda="${escapeHtml(r.tienda)}" data-producto="${escapeHtml(q)}">
         Agregar precio
+        <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
+    data-web="1"
+    data-tienda="${escapeHtml(r.tienda)}"
+    data-producto="${escapeHtml(q)}"
+    data-zip="${escapeHtml(r.zip)}">
+    Buscar precio (web)
+  </button>
+</div>
       </button>
     </div>
   </div>
@@ -366,12 +374,17 @@
     `).join("");
 
     // Conectar botones "Agregar precio" (por delegación simple)
-    out.querySelectorAll("button[data-tienda]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const tienda = btn.getAttribute("data-tienda");
-        const producto = btn.getAttribute("data-producto");
-        guardarPrecio(producto, tienda);
-      });
+    out.querySelectorAll("button[data-web='1']").forEach(btn => {
+  btn.addEventListener("click", () => {
+    const tienda = btn.getAttribute("data-tienda");
+    const producto = btn.getAttribute("data-producto");
+    const zip = btn.getAttribute("data-zip") || "94545";
+
+    const query = encodeURIComponent(`${producto} ${tienda} price ${zip}`);
+    const url = `https://www.google.com/search?q=${query}`;
+    window.open(url, "_blank");
+  });
+
     });
 
     guardarHistorial(`${q} (ZIP ${zip})`, { tienda: resultados[0].tienda, precio: resultados[0].precio });
