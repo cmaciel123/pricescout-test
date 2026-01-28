@@ -134,7 +134,32 @@
       .logo{width: 96px; height: 96px}
     }
   </style>
+  
 </head>
+.badge{
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(34,197,94,.14);
+  border: 1px solid rgba(34,197,94,.35);
+}
+.badge2{
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 800;
+  background: rgba(255,255,255,.10);
+  border: 1px solid rgba(255,255,255,.16);
+}
+.badgeHot{
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 900;
+  background: rgba(255,165,0,.16);
+  border: 1px solid rgba(255,165,0,.35);
+}
 
 <body>
   <div class="wrap">
@@ -309,26 +334,35 @@
         tienda: t.nombre,
         direccion: t.direccion,
         zip,
+        tipo: t.tipo,     // ✅
         precio: (p ?? rand(1.49, 9.99))
       };
     }).sort((a,b)=>a.precio-b.precio);
 
-    out.innerHTML = resultados.map((r, i) => `
-      <div class="store">
-        <div>
-          <div><b>${escapeHtml(r.tienda)}</b></div>
-          <div class="small muted">${escapeHtml(r.direccion)} • ZIP: ${escapeHtml(r.zip)}</div>
-          <div class="small">Producto: <span class="muted">${escapeHtml(q)}</span></div>
-        </div>
-        <div style="text-align:right">
-          <div class="pill">$${r.precio.toFixed(2)}</div>
-          <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
-            data-tienda="${escapeHtml(r.tienda)}" data-producto="${escapeHtml(q)}">
-            Agregar precio
-          </button>
-          <div class="small muted">${i===0 ? "🔥 más barato" : ""}</div>
-        </div>
+   out.innerHTML = resultados.map((r, i) => `
+  <div class="store">
+    <div>
+      <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap;">
+        <b>${escapeHtml(r.tienda)}</b>
+        <span class="badge">${escapeHtml(r.tipo || "Tienda")}</span>
+        <span class="badge2">ZIP ${escapeHtml(r.zip)}</span>
+        ${i===0 ? `<span class="badgeHot">🔥 Más barato</span>` : ``}
       </div>
+
+      <div class="small muted">${escapeHtml(r.direccion)}</div>
+      <div class="small">Producto: <span class="muted">${escapeHtml(q)}</span></div>
+    </div>
+
+    <div style="text-align:right">
+      <div class="pill">$${r.precio.toFixed(2)}</div>
+      <button class="btn2" type="button" style="margin-top:8px; padding:8px 10px;"
+        data-tienda="${escapeHtml(r.tienda)}" data-producto="${escapeHtml(q)}">
+        Agregar precio
+      </button>
+    </div>
+  </div>
+
+
     `).join("");
 
     // Conectar botones "Agregar precio" (por delegación simple)
